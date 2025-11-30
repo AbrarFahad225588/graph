@@ -77,7 +77,8 @@ public class PloatEquation{
    public static void displayErrorMessage(String error, TextField tf,Map<TextField, Label> errorMap) {
         if (errorMap.get(tf) != null) return;
         Label errorLabel = new Label(error);
-        errorLabel.setStyle("-fx-text-fill: #FF0000;");
+//        errorLabel.setStyle("-fx-text-fill: #FF0000;");
+        errorLabel.setTextFill(Color.RED);
         errorLabel.setFont(new Font(15));
         errorLabel.setTranslateX(100);
         errorLabel.setTranslateY(-20);
