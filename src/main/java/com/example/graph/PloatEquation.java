@@ -1,9 +1,8 @@
 
 package  com.example.graph;
-import com.example.graph.EquationSolver;
+
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -22,6 +21,7 @@ public class PloatEquation{
     public static void plotEquation(HBox equationBox, String equation, Map<TextField, ArrayList<XYChart.Series<Number, Number>>> equationMap, LineChart<Number, Number> lineChart,Map<TextField, Color> colorMap,Map<TextField, Label> errorMap) {
         Circle c = (Circle) equationBox.getChildren().get(0);
         TextField tf = (TextField) equationBox.getChildren().get(2);
+
 
         try {
             EquationSolver EQ = new EquationSolver();

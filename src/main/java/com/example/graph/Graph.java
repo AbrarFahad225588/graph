@@ -25,7 +25,7 @@ public class Graph {
     private final LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
 
     private final GraphingApp app;
-    private final ArrayList<Color> alreadyChosen = new ArrayList<>();
+
     private final Map<TextField, ArrayList<XYChart.Series<Number, Number>>> equationMap = new HashMap<>();
     private final Map<TextField, Color> colorMap = new HashMap<>();
     private final Map<TextField, Label> errorMap = new HashMap<>();
