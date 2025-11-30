@@ -159,19 +159,8 @@ private VBox addEquationBox(VBox bottomPanel) {
 
 
 
-    // ---------------- Helpers ----------------
-    private void displayErrorMessage(String error, TextField tf) {
-        if (errorMap.get(tf) != null) return;
-        Label errorLabel = new Label(error);
-        errorLabel.setStyle("-fx-text-fill: #FF0000;");
-        errorLabel.setFont(new Font(15));
-        errorLabel.setTranslateX(100);
-        errorLabel.setTranslateY(-20);
 
-        errorMap.put(tf, errorLabel);
-        VBox parentVBox = (VBox) tf.getParent().getParent();
-        parentVBox.getChildren().add(errorLabel);
-    }
+
 
 
 

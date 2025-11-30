@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -69,11 +70,21 @@ public class PloatEquation{
 
         } catch (Exception e) {
             c.setFill(Color.WHITE);
-            displayErrorMessage("Not a valid equation.", tf);
+            displayErrorMessage("Not a valid equation.", tf,errorMap);
         }
     }
 
-    private static void displayErrorMessage(String s, TextField tf) {
+   public static void displayErrorMessage(String error, TextField tf,Map<TextField, Label> errorMap) {
+        if (errorMap.get(tf) != null) return;
+        Label errorLabel = new Label(error);
+        errorLabel.setStyle("-fx-text-fill: #FF0000;");
+        errorLabel.setFont(new Font(15));
+        errorLabel.setTranslateX(100);
+        errorLabel.setTranslateY(-20);
+
+        errorMap.put(tf, errorLabel);
+        VBox parentVBox = (VBox) tf.getParent().getParent();
+        parentVBox.getChildren().add(errorLabel);
     }
 }
 
