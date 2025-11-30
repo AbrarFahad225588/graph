@@ -10,6 +10,8 @@ module com.example.graph {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires javafx.graphics;
+    requires annotations;
 
     opens com.example.graph to javafx.fxml;
     exports com.example.graph;
