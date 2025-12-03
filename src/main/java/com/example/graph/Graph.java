@@ -157,13 +157,6 @@ private VBox addEquationBox(VBox bottomPanel) {
         bottomPanel.getChildren().remove(equationBox.getParent());
     }
 
-
-
-
-
-
-
-
     private Button createOptionButton(String title, String color, int deltaX, Runnable action) {
         Button button = new Button(title);
         button.setTranslateX(deltaX);

@@ -10,7 +10,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -86,6 +85,7 @@ public class PloatEquation{
         errorMap.put(tf, errorLabel);
         VBox parentVBox = (VBox) tf.getParent().getParent();
         parentVBox.getChildren().add(errorLabel);
+        // hi testing
     }
 }
 
