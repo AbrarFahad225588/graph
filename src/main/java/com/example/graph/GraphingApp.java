@@ -33,4 +33,10 @@ public class GraphingApp extends Application {
         Scene calculatorScene=calculator.createCalculatorScene();
         stage.setScene(calculatorScene);
     }
+    protected void openTrigonmetryScene()
+    {
+        Trigonmetry trigonmetry=new Trigonmetry(this);
+        Scene trigonmetryScene=trigonmetry.createTrigonmetryScene();
+        stage.setScene(trigonmetryScene);
+    }
 }

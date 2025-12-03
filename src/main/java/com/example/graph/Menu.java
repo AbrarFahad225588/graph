@@ -30,7 +30,7 @@ public class Menu {
         StackPane.setAlignment(title, Pos.CENTER);
         titlePane.setTranslateY(30);
 
-        Button newGraphButton = createSquareButton("New Graph", Color.BLUE);
+        Button newGraphButton = createSquareButton("Polynomial", Color.BLUE);
         newGraphButton.setStyle("-fx-background-color: orange; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;");
         newGraphButton.setOnMouseEntered(e -> newGraphButton.setStyle("-fx-background-color: lightgreen; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;"));
         newGraphButton.setOnMouseExited(e -> newGraphButton.setStyle("-fx-background-color: orange; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;"));
@@ -38,13 +38,21 @@ public class Menu {
         newGraphButton.setTranslateX(80);
         newGraphButton.setTranslateY(-30);
 
-//        Button calculatorbtn = createSquareButton("Calculator", Color.BLUE);
-//        calculatorbtn.setStyle("-fx-background-color: orange; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;");
-//        calculatorbtn.setOnMouseEntered(e -> calculatorbtn.setStyle("-fx-background-color: lightgreen; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;"));
-//        calculatorbtn.setOnMouseExited(e -> calculatorbtn.setStyle("-fx-background-color: orange; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;"));
-//        calculatorbtn.setOnAction(event -> app.calculatorScene());
-//        calculatorbtn.setTranslateX(80);
-//        calculatorbtn.setTranslateY(-30);
+        Button calculatorbtn = createSquareButton("Calculator", Color.BLUE);
+        calculatorbtn.setStyle("-fx-background-color: orange; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;");
+        calculatorbtn.setOnMouseEntered(e -> calculatorbtn.setStyle("-fx-background-color: lightgreen; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;"));
+        calculatorbtn.setOnMouseExited(e -> calculatorbtn.setStyle("-fx-background-color: orange; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;"));
+        calculatorbtn.setOnAction(event -> app.calculatorScene());
+        calculatorbtn.setTranslateX(80);
+        calculatorbtn.setTranslateY(-30);
+
+        Button trigonmetryButton = createSquareButton("TrigonMetry", Color.BLUE);
+        trigonmetryButton.setStyle("-fx-background-color: orange; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;");
+        trigonmetryButton.setOnMouseEntered(e -> trigonmetryButton.setStyle("-fx-background-color: lightgreen; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;"));
+        trigonmetryButton.setOnMouseExited(e -> trigonmetryButton.setStyle("-fx-background-color: orange; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;"));
+        trigonmetryButton.setOnAction(event -> app.openTrigonmetryScene());
+        trigonmetryButton.setTranslateX(80);
+        trigonmetryButton.setTranslateY(-30);
 
 
 
@@ -52,7 +60,7 @@ public class Menu {
         backgroundPane.setMinSize(1200, 794);
         backgroundPane.setStyle("-fx-background-color: lightgreen");
 
-        HBox functionBox = new HBox(newGraphButton);
+        HBox functionBox = new HBox(newGraphButton,trigonmetryButton);
         functionBox.setSpacing(200);
         functionBox.setAlignment(Pos.CENTER);
 
