@@ -9,6 +9,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -35,30 +36,66 @@ public class Graph {
     }
 
     // ---------------- Zoom ----------------
-    private void zoomInOrOut(double x, double y, char op) {
-        double xRange = xAxis.getUpperBound() - xAxis.getLowerBound();
-        double yRange = yAxis.getUpperBound() - yAxis.getLowerBound();
-        double factor = (op == '*') ? 1 : 0.25;
+    private void setupZoomHandlers() {
+        // ১. মাউস ক্লিক দিয়ে জুম (Left Click = In, Right Click = Out)
+        lineChart.setOnMouseClicked(e -> {
+            double dataX = xAxis.getValueForDisplay(e.getX()).doubleValue();
+            double dataY = yAxis.getValueForDisplay(e.getY()).doubleValue();
 
-        xAxis.setLowerBound(Math.max(x - xRange * factor, LOWER_BOUND));
-        xAxis.setUpperBound(Math.min(x + xRange * factor, UPPER_BOUND));
-        yAxis.setLowerBound(Math.max(y - yRange * factor, LOWER_BOUND));
-        yAxis.setUpperBound(Math.min(y + yRange * factor, UPPER_BOUND));
+            if (e.getButton() == MouseButton.PRIMARY) {
+                applyZoom(dataX, dataY, 0.5); // জুম ইন (রেঞ্জ অর্ধেক হবে)
+            } else if (e.getButton() == MouseButton.SECONDARY) {
+                applyZoom(dataX, dataY, 2.0); // জুম আউট (রেঞ্জ দ্বিগুণ হবে)
+            }
+        });
+
+        // ২. মাউস স্ক্রল (Wheel) দিয়ে জুম - এটি আরও স্মুথ অভিজ্ঞতা দেয়
+        lineChart.setOnScroll(e -> {
+            double dataX = xAxis.getValueForDisplay(e.getX()).doubleValue();
+            double dataY = yAxis.getValueForDisplay(e.getY()).doubleValue();
+
+            double zoomFactor = (e.getDeltaY() > 0) ? 0.8 : 1.2;
+            applyZoom(dataX, dataY, zoomFactor);
+        });
+    }
+
+    // এই ফাংশনটি আগের zoomInOrOut কে রিপ্লেস করবে
+    private void applyZoom(double x, double y, double factor) {
+        double oldXRange = xAxis.getUpperBound() - xAxis.getLowerBound();
+        double oldYRange = yAxis.getUpperBound() - yAxis.getLowerBound();
+
+        double newXRange = oldXRange * factor;
+        double newYRange = oldYRange * factor;
+
+        // ক্লিক করা পয়েন্টকে মাঝখানে রেখে নতুন বাউন্ডারি সেট করা
+        double newLowerX = x - (x - xAxis.getLowerBound()) * factor;
+        double newUpperX = newLowerX + newXRange;
+
+        double newLowerY = y - (y - yAxis.getLowerBound()) * factor;
+        double newUpperY = newLowerY + newYRange;
+
+        // সীমানা নির্ধারণ
+        xAxis.setLowerBound(newLowerX);
+        xAxis.setUpperBound(newUpperX);
+        yAxis.setLowerBound(newLowerY);
+        yAxis.setUpperBound(newUpperY);
     }
 
     // ---------------- Scene ----------------
     protected Scene createGraphScene() {
-        lineChart.setOnMousePressed(e -> {
-            double dataX = xAxis.getValueForDisplay(e.getX()).doubleValue();
-            double dataY = yAxis.getValueForDisplay(e.getY()).doubleValue();
-            if (e.isPrimaryButtonDown() && e.getClickCount() >= 2) zoomInOrOut(dataX, dataY, '/');
-            else if (e.isSecondaryButtonDown()) zoomInOrOut(dataX, dataY, '*');
-        });
+//        lineChart.setOnMousePressed(e -> {
+//            double dataX = xAxis.getValueForDisplay(e.getX()).doubleValue();
+//            double dataY = yAxis.getValueForDisplay(e.getY()).doubleValue();
+//            if (e.isPrimaryButtonDown() && e.getClickCount() >= 2) zoomInOrOut(dataX, dataY, '/');
+//            else if (e.isSecondaryButtonDown()) zoomInOrOut(dataX, dataY, '*');
+//        });
+        setupZoomHandlers();
 
         lineChart.setPrefSize(800, 600);
         lineChart.setCreateSymbols(false);
         lineChart.setLegendVisible(false);
-        lineChart.setAnimated(false);
+        lineChart.setAnimated(true);
+        lineChart.setTitle("Polynomial Graph");
 
         ScrollPane rootPane = new ScrollPane();
         VBox mainVBox = new VBox();

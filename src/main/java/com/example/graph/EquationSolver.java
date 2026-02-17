@@ -8,25 +8,24 @@ public class EquationSolver {
 
     private ArrayList<String> tokens;
 
-    // --- Stacks for Shunting Yard ---
+
     private Stack<String> operators = new Stack<>();
     private Stack<Double> numbers = new Stack<>();
 
     public double parseEquation(String equation, double x) throws Exception {
-        // 1️⃣ Tokenize the input equation
+
         tokens = tokenize(equation, x);
 
-        // 2️⃣ Handle negative numbers & decimals in token list
+
         processNegativesAndDecimals();
 
-        // 3️⃣ Convert tokens to Reverse Polish Notation (RPN) using Shunting Yard
+
         ArrayList<String> rpn = convertToRPN(tokens);
 
-        // 4️⃣ Evaluate RPN expression
+
         return evaluateRPN(rpn);
     }
 
-    // ---------------- Tokenization ----------------
     private ArrayList<String> tokenize(String expression, double x) throws Exception {
         ArrayList<String> tokenList = new ArrayList<>();
         StringBuilder numberBuffer = new StringBuilder();
@@ -57,7 +56,7 @@ public class EquationSolver {
 
         if (numberBuffer.length() > 0) tokenList.add(numberBuffer.toString());
 
-        // 5️⃣ Handle implicit multiplication
+
         tokenList = handleImplicitMultiplication(tokenList);
 
         return tokenList;
@@ -75,7 +74,7 @@ public class EquationSolver {
 
             if (i < list.size() - 1) {
                 String next = list.get(i + 1);
-                // Insert "*" between number or ')' and '(' or number
+
                 if ((isNumeric(curr) || curr.equals(")")) && (next.equals("(") || isNumeric(next))) {
                     result.add("*");
                 }

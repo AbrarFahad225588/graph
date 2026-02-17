@@ -27,12 +27,7 @@ public class GraphingApp extends Application {
         Scene menuScene = menu.createMenuScene();
         stage.setScene(menuScene);
     }
-    protected void calculatorScene()
-    {
-        Calculator calculator=new Calculator(this);
-        Scene calculatorScene=calculator.createCalculatorScene();
-        stage.setScene(calculatorScene);
-    }
+
     protected void openTrigonmetryScene()
     {
         Trigonmetry trigonmetry=new Trigonmetry(this);

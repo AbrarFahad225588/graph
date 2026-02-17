@@ -38,13 +38,7 @@ public class Menu {
         newGraphButton.setTranslateX(80);
         newGraphButton.setTranslateY(-30);
 
-        Button calculatorbtn = createSquareButton("Calculator", Color.BLUE);
-        calculatorbtn.setStyle("-fx-background-color: orange; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;");
-        calculatorbtn.setOnMouseEntered(e -> calculatorbtn.setStyle("-fx-background-color: lightgreen; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;"));
-        calculatorbtn.setOnMouseExited(e -> calculatorbtn.setStyle("-fx-background-color: orange; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;"));
-        calculatorbtn.setOnAction(event -> app.calculatorScene());
-        calculatorbtn.setTranslateX(80);
-        calculatorbtn.setTranslateY(-30);
+
 
         Button trigonmetryButton = createSquareButton("TrigonMetry", Color.BLUE);
         trigonmetryButton.setStyle("-fx-background-color: orange; -fx-border-color: red; -fx-border-width: 6px; -fx-border-radius: 20px; -fx-background-radius: 20px;");
@@ -74,14 +68,7 @@ public class Menu {
         return new Scene(root, 1200, 794);
     }
 
-//    private Text createMenuText(String words, int fontSize, int deltaX, int deltaY) {
-//        Text text = new Text(words);
-//        text.setFont(Font.font(fontSize));
-//        text.setFill(Color.BLUE);
-//        text.setTranslateX(deltaX);
-//        text.setTranslateY(deltaY);
-//        return text;
-//    }
+
 
 
     private Button createSquareButton(String text, Color color) {

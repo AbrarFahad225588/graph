@@ -12,6 +12,7 @@ module com.example.graph {
     requires com.almasb.fxgl.all;
     requires javafx.graphics;
     requires annotations;
+    requires exp4j;
 
     opens com.example.graph to javafx.fxml;
     exports com.example.graph;
