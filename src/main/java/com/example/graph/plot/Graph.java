@@ -136,7 +136,7 @@ public class Graph {
         Button addEquationBtn = createOptionButton("Add", "#2ecc71", () -> {
             equationListContainer.getChildren().add(addEquationBox(bottomPanel));
         });
-        Button menuBtn = createOptionButton("Menu", "#3498db", app::openMenuScene);
+        Button menuBtn = createOptionButton("Menu", "#3498db", app::openHomeScene);
         Button newGraphBtn = createOptionButton("Reset", "#f39c12", app::openGraphScene);
 
         HBox buttonBox = new HBox(15, addEquationBtn, menuBtn, newGraphBtn);

@@ -166,7 +166,7 @@ public class Register {
             System.out.println("User: " + userName + " Registered!");
             app.openLoginScene();
         });
-        cancel.setOnAction(e -> app.openMenuScene());
+        cancel.setOnAction(e -> app.openHomeScene());
 
         return new Scene(rootContainer, 1200, 794);
     }
