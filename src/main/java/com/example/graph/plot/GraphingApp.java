@@ -14,8 +14,8 @@ public class GraphingApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.stage = primaryStage;
-        stage.setTitle("Graphing Calculator");
-        openMenuScene();
+        stage.setTitle("calligraphy");
+        openHomeScene();
         stage.show();
 
     }
@@ -28,10 +28,10 @@ public class GraphingApp extends Application {
         stage.setScene(graphScene);
     }
 
-    public void openMenuScene() {
-        Menu menu = new Menu(this);
-        Scene menuScene = menu.createMenuScene();
-        stage.setScene(menuScene);
+    public void openHomeScene() {
+        Home home = new Home(this);
+        Scene homeScene = home.createHomeScene();
+        stage.setScene(homeScene);
     }
 
 

@@ -171,7 +171,7 @@ public class Login {
             }
         });
 
-        backBtn.setOnAction(e -> app.openMenuScene());
+        backBtn.setOnAction(e -> app.openHomeScene());
 
         return new Scene(rootContainer, 1200, 794);
     }
