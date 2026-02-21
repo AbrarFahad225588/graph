@@ -14,6 +14,15 @@ module com.example.graph {
     requires annotations;
     requires exp4j;
 
-    opens com.example.graph to javafx.fxml;
-    exports com.example.graph;
+
+//    opens com.example.graph to javafx.fxml;
+    exports com.example.graph.auth;
+    requires com.google.gson;
+    requires jbcrypt;
+    requires java.desktop;
+    requires javafx.swing;
+    opens com.example.graph.auth to com.google.gson;
+    exports com.example.graph.plot;
+    opens com.example.graph.plot to javafx.fxml;
+
 }

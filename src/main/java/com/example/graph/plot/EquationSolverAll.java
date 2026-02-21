@@ -1,13 +1,13 @@
-package com.example.graph;
+package com.example.graph.plot;
 
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
-public class TrigonEquationSolver {
+public class EquationSolverAll {
 
-    private String expression;
+    private final String expression;
 
-    public TrigonEquationSolver(String expression) {
+    public EquationSolverAll(String expression) {
         this.expression = expression;
     }
 
