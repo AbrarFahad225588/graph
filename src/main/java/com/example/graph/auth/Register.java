@@ -121,7 +121,7 @@ public class Register {
         Button register = new Button("Register");
         register.setDefaultButton(true);
         Button cancel = new Button("Cancel");
-
+        Label label=new Label();
         // Styling Buttons
         String btnBase = "-fx-cursor: hand; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20;";
         register.setStyle(btnBase + "-fx-background-color: #2ecc71; -fx-text-fill: white;");
@@ -147,7 +147,9 @@ public class Register {
 
                     for (User user : users) {
                         if (user.getUsername().equals(userName)) {
-                            System.out.println("Username already exists!");
+                            label.setText("Username already exists!");
+
+//                            System.out.println("Username already exists!");
                             return;
                         }
                     }

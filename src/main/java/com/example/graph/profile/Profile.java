@@ -136,7 +136,7 @@ public class Profile {
         Button logout = new Button("Log Out");
         Button backGraph=new Button("Graph");
         Button backMenu=new Button("Menu");
-
+        Label label=new Label();
         // Styling Buttons
         String btnBase = "-fx-cursor: hand; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20;";
         save.setStyle(btnBase + "-fx-background-color: #2ecc71; -fx-text-fill: white;");
@@ -160,7 +160,8 @@ public class Profile {
         buttonBox2.setAlignment(Pos.CENTER);
         HBox.setHgrow(backGraph, Priority.ALWAYS);
         HBox.setHgrow(backMenu, Priority.ALWAYS);
-        VBox allBtn=new VBox(10,buttonBox,buttonBox2);
+        VBox allBtn=new VBox(10,buttonBox,buttonBox2,label);
+        allBtn.setAlignment(Pos.CENTER);
 
 
         // Assemble
@@ -177,7 +178,8 @@ public class Profile {
             {
                 for (User user : users) {
                     if (user.getUsername().equals(userName)) {
-                        System.out.println("Username already exists!");
+//                        System.out.println("Username already exists!");
+                        label.setText("Username already exists!");
                         return;
                     }
                 }
@@ -187,12 +189,12 @@ public class Profile {
             String email = inputMap.get("Email:").getText();
             String phone = inputMap.get("Phone:").getText();
             for (User u : users) {
-                if (u.getId() == user.getId()) { // ID দিয়ে বর্তমান ইউজারকে খুঁজে বের করা
+                if (u.getId() == user.getId()) {
                     u.setUsername(userName);
                     u.setEmail(email);
                     u.setPhone(phone);
 
-                    // যদি পাসওয়ার্ড ফিল্ড খালি না থাকে, তবেই আপডেট হবে
+
                     if (!password.isEmpty()) {
                         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
                         u.setPassword(hashedPassword);
@@ -204,7 +206,8 @@ public class Profile {
 
             if (updated) {
                 FileDatabase.saveUsers(users);
-                System.out.println("Profile Updated Successfully!");
+//                System.out.println("Profile Updated Successfully!");
+                label.setText("Profile Updated Successfully!");
                 app.openProfileScene(); // আপডেট শেষে গ্রাফ পেজে ফিরে যাওয়া
             }
 

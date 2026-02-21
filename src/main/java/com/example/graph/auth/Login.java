@@ -125,7 +125,7 @@ public class Login {
         Button loginBtn = new Button("Login");
         loginBtn.setDefaultButton(true);
         Button backBtn = new Button("Back");
-
+        Label label=new Label();
         // Styling Buttons (Matching your Register design)
         String btnBase = "-fx-cursor: hand; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20;";
         loginBtn.setStyle(btnBase + "-fx-background-color: #3498db; -fx-text-fill: white;"); // Blue for login
@@ -140,7 +140,7 @@ public class Login {
         HBox.setHgrow(backBtn, Priority.ALWAYS);
 
         // Assemble
-        formCard.getChildren().addAll(heading, grid, buttonBox);
+        formCard.getChildren().addAll(heading, grid, buttonBox,label);
         rootContainer.getChildren().add(formCard);
 
         // --- Login Logic ---
@@ -165,8 +165,9 @@ public class Login {
                 System.out.println("Login successful!");
                 app.openGraphScene();
             } else {
-                System.out.println("Invalid Username or Password!");
 
+//                System.out.println("Invalid Username or Password!");
+                 label.setText("Invalid Username or Password!");
             }
         });
 
