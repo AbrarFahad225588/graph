@@ -1,6 +1,6 @@
 package com.example.graph.plot;
 
-import javafx.application.Application;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,10 +11,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
+
+
+import java.util.Objects;
 
 public class Home {
     GraphingApp app;
@@ -24,6 +25,7 @@ public class Home {
     public Scene createHomeScene(){
         VBox root = new VBox();
         root.setStyle("-fx-background-color: white;");
+
 
 
         HBox navbar = createNavbar();
@@ -53,15 +55,33 @@ public class Home {
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         Button login = new Button("Log In");
-        login.setStyle("-fx-background-color: transparent; -fx-border-color: #ccc; -fx-border-radius: 4;");
+        login.setStyle("-fx-background-color: #F44336;-fx-text-fill: white; -fx-font-weight: bold;");
         login.setOnAction(e->{
             app.openLoginScene();
+        });
+        login.setOnMouseEntered(e -> {
+            login.setStyle("-fx-background-color: #F44999;-fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
+            login.setTranslateY(-2); // Subtle "lift" effect
+        });
+
+        login.setOnMouseExited(e -> {
+            login.setStyle("-fx-background-color: #F44336;-fx-text-fill: white; -fx-font-weight: bold;");
+            login.setTranslateY(0);
         });
         Button register = new Button("Register");
         register.setStyle("-fx-background-color: #2d70b3; -fx-text-fill: white; -fx-font-weight: bold;");
           register.setOnAction(e->{
               app.openRegisterScene();
           });
+        register.setOnMouseEntered(e -> {
+            register.setStyle("-fx-background-color: #1b9d4b;-fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
+            register.setTranslateY(-2); // Subtle "lift" effect
+        });
+
+        register.setOnMouseExited(e -> {
+            register.setStyle("-fx-background-color: #2d70b3; -fx-text-fill: white; -fx-font-weight: bold;");
+            register.setTranslateY(0);
+        });
         nav.getChildren().addAll(logo, spacer, login, register);
         return nav;
     }
@@ -92,13 +112,42 @@ public class Home {
          openCalc.setOnAction(e->{
                app.openGraphScene();
          });
+        openCalc.setOnMouseEntered(e -> {
+            openCalc.setStyle("-fx-background-color: white; -fx-text-fill: #333; -fx-font-size: 16px; -fx-padding: 10 20; -fx-cursor: hand;");
+            openCalc.setTranslateY(-2); // Subtle "lift" effect
+        });
+
+        openCalc.setOnMouseExited(e -> {
+            openCalc.setStyle("-fx-background-color: white; -fx-text-fill: #333; -fx-font-size: 16px; -fx-padding: 10 20;");
+            openCalc.setTranslateY(0);
+        });
         leftText.getChildren().addAll(title, subTitle, openCalc);
 
 
         VBox graphCard = new VBox();
         graphCard.setPrefSize(300, 300);
-        graphCard.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);");
+        graphCard.setMinSize(300, 300);
+        graphCard.setMaxSize(300, 300);
 
+        // 1. Path to your image
+        String imagePath = Objects.requireNonNull(getClass().getResource("/com/example/graph/graphing-calculator.png")).toExternalForm();
+
+        // 2. Setting everything via CSS to avoid conflicts
+        graphCard.setStyle(
+                "-fx-background-image: url('" + imagePath + "'); " +
+                        "-fx-background-size: cover; " +
+                        "-fx-background-position: center; " +
+                        "-fx-background-repeat: no-repeat; " +
+                        "-fx-background-radius: 20; " + // Match the clip radius
+                        "-fx-border-radius: 20; " +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 15, 0, 0, 5);"
+        );
+
+        // 3. Optional: Clip the VBox so the image doesn't "leak" out of rounded corners
+        Rectangle clip = new Rectangle(300, 300);
+        clip.setArcWidth(40); // Controls the roundness
+        clip.setArcHeight(40);
+        graphCard.setClip(clip);
 
         content.getChildren().addAll(leftText, graphCard);
 
@@ -130,9 +179,6 @@ public class Home {
         graphing.setOnMouseClicked(e->{
             app.openGraphScene();
         });
-        graphing.setOnMouseEntered(e->{
-
-        });
 
         tools.getChildren().addAll(sectionTitle, grid);
         return tools;
@@ -142,15 +188,37 @@ public class Home {
         VBox box = new VBox(10);
         box.setAlignment(Pos.CENTER);
 
+        // 1. The Container for the icon
         StackPane iconRect = new StackPane();
         iconRect.setPrefSize(80, 80);
-        iconRect.setStyle("-fx-background-color: " + hexColor + "; -fx-background-radius: 15;");
+        // Use a variable for the base style to make updating easier
+        String baseStyle = "-fx-background-color: " + hexColor + "; -fx-background-radius: 15;";
+        iconRect.setStyle(baseStyle);
+
+        // 2. The Sine/Cosine Wave (SVGPath)
+        SVGPath wave = new SVGPath();
+        // This path creates a simple double-curve (sine-like) wave
+        wave.setContent("M10,40 Q25,10 40,40 T70,40");
+        wave.setStroke(Color.WHITE);
+        wave.setStrokeWidth(3);
+        wave.setFill(null); // Keep it as a line, not a solid shape
+
+        iconRect.getChildren().add(wave);
 
         Label label = new Label(name);
         label.setStyle("-fx-font-size: 14px; -fx-text-fill: #666;");
-        box.setOnMouseEntered(e->{
-            iconRect.setStyle("-fx-background-color: " + "#5ca742" + "; -fx-background-radius: 15;");
+
+        // 3. Logic for Hover (Handling everything on the 'box')
+        box.setOnMouseEntered(e -> {
+            iconRect.setStyle("-fx-background-color: #1b9d4b; -fx-background-radius: 15; -fx-cursor: hand;");
+            box.setTranslateY(-2); // Subtle "lift" effect
         });
+
+        box.setOnMouseExited(e -> {
+            iconRect.setStyle(baseStyle);
+            box.setTranslateY(0);
+        });
+
         box.getChildren().addAll(iconRect, label);
         return box;
     }

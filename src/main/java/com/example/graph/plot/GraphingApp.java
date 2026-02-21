@@ -4,8 +4,12 @@ import com.example.graph.auth.Login;
 import com.example.graph.auth.Register;
 import com.example.graph.profile.Profile;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+
+import java.util.Objects;
+
 import static com.example.graph.auth.AuthService.authenticated;
 public class GraphingApp extends Application {
     private Stage stage;
@@ -15,6 +19,13 @@ public class GraphingApp extends Application {
     public void start(Stage primaryStage) {
         this.stage = primaryStage;
         stage.setTitle("calligraphy");
+        try {
+            // Using the same path structure as your home screen images
+            Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/graph/sinewave.png")));
+            stage.getIcons().add(icon);
+        } catch (Exception e) {
+            System.out.println("Could not load application icon: " + e.getMessage());
+        }
         openHomeScene();
         stage.show();
 
