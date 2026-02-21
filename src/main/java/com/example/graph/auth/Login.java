@@ -126,6 +126,7 @@ public class Login {
         loginBtn.setDefaultButton(true);
         Button backBtn = new Button("Back");
         Label label=new Label();
+        label.setStyle("-fx-text-fill: red;");
         // Styling Buttons (Matching your Register design)
         String btnBase = "-fx-cursor: hand; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20;";
         loginBtn.setStyle(btnBase + "-fx-background-color: #3498db; -fx-text-fill: white;"); // Blue for login
@@ -162,7 +163,7 @@ public class Login {
             }
 
             if (authenticated!=null) {
-                System.out.println("Login successful!");
+
                 app.openGraphScene();
             } else {
 

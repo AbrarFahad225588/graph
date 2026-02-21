@@ -15,6 +15,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import static com.example.graph.auth.ValidatorUtils.*;
 public class Profile {
     GraphingApp app;
     User user;
@@ -133,33 +134,34 @@ public class Profile {
         // 4. Buttons Layout
         Button save = new Button("Save");
         save.setDefaultButton(true);
-        Button logout = new Button("Log Out");
+        Button delete = new Button("Delete");
         Button backGraph=new Button("Graph");
-        Button backMenu=new Button("Menu");
+        Button backHome=new Button("Home");
         Label label=new Label();
+        label.setStyle("-fx-text-fill: red;");
         // Styling Buttons
         String btnBase = "-fx-cursor: hand; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20;";
         save.setStyle(btnBase + "-fx-background-color: #2ecc71; -fx-text-fill: white;");
-        logout.setStyle(btnBase + "-fx-background-color: #e74c3c; -fx-text-fill: white;");
+        delete.setStyle(btnBase + "-fx-background-color: #e74c3c; -fx-text-fill: white;");
 
         save.setMaxWidth(Double.MAX_VALUE);
-        logout.setMaxWidth(Double.MAX_VALUE);
+        delete.setMaxWidth(Double.MAX_VALUE);
 
-        HBox buttonBox = new HBox(15, save, logout);
+        HBox buttonBox = new HBox(15, save, delete);
         buttonBox.setAlignment(Pos.CENTER);
         HBox.setHgrow(save, Priority.ALWAYS);
-        HBox.setHgrow(logout, Priority.ALWAYS);
+        HBox.setHgrow(delete, Priority.ALWAYS);
 
         backGraph.setStyle(btnBase + "-fx-background-color: #000099; -fx-text-fill: white;");
-        backMenu.setStyle(btnBase + "-fx-background-color: #000099; -fx-text-fill: white;");
+        backHome.setStyle(btnBase + "-fx-background-color: #000099; -fx-text-fill: white;");
 
         backGraph.setMaxWidth(150);
-        backMenu.setMaxWidth(150);
+        backHome.setMaxWidth(150);
 
-        HBox buttonBox2 = new HBox(10, backGraph, backMenu);
+        HBox buttonBox2 = new HBox(10, backGraph, backHome);
         buttonBox2.setAlignment(Pos.CENTER);
         HBox.setHgrow(backGraph, Priority.ALWAYS);
-        HBox.setHgrow(backMenu, Priority.ALWAYS);
+        HBox.setHgrow(backHome, Priority.ALWAYS);
         VBox allBtn=new VBox(10,buttonBox,buttonBox2,label);
         allBtn.setAlignment(Pos.CENTER);
 
@@ -176,18 +178,47 @@ public class Profile {
             boolean updated = false;
             if(!userName.equals(user.getUsername()))
             {
-                for (User user : users) {
-                    if (user.getUsername().equals(userName)) {
-//                        System.out.println("Username already exists!");
-                        label.setText("Username already exists!");
-                        return;
+                if(!userName.isEmpty())
+                {
+                    for (User user : users) {
+                        if (user.getUsername().equals(userName)) {
+                            label.setText("Username already exists!");
+                            return;
+                        }
                     }
+                }else
+                {
+                    label.setText("Required fill all Field");
+                    return;
                 }
+
             }
 
             String password = inputMap.get("Password:").getText();
             String email = inputMap.get("Email:").getText();
+            if (!email.isEmpty())
+            {
+                if(!isValidEmailFormat(email))
+                {
+                    label.setText("Invalid email format.");
+                    return;
+                }
+            }else
+            {
+                label.setText("Required Fill all Field");
+                return;
+            }
             String phone = inputMap.get("Phone:").getText();
+            if (!phone.isEmpty())
+            {
+                if(!isValidPhoneNumber(phone))
+                {
+                    label.setText("Invalid Phone Number.");
+                    return;
+                }
+            }else {
+                label.setText("Required Fill all Field");
+            }
             for (User u : users) {
                 if (u.getId() == user.getId()) {
                     u.setUsername(userName);
@@ -195,9 +226,13 @@ public class Profile {
                     u.setPhone(phone);
 
 
-                    if (!password.isEmpty()) {
+                    if (!password.isEmpty() && isValidPassword(password)) {
                         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
                         u.setPassword(hashedPassword);
+                    }else
+                    {
+                        label.setText("Password must be 8+ chars!");
+                        return;
                     }
                     updated = true;
                     break;
@@ -208,12 +243,37 @@ public class Profile {
                 FileDatabase.saveUsers(users);
 //                System.out.println("Profile Updated Successfully!");
                 label.setText("Profile Updated Successfully!");
-                app.openProfileScene(); // আপডেট শেষে গ্রাফ পেজে ফিরে যাওয়া
+                app.openProfileScene();
             }
 
         });
-        logout.setOnAction(e -> app.openLoginScene());
 
+        delete.setOnAction(e -> {
+            // 1. Create a confirmation alert (Good UX practice)
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Account");
+            alert.setHeaderText("Are you sure you want to delete your account?");
+            alert.setContentText("This action cannot be undone.");
+
+            if (alert.showAndWait().get() == ButtonType.OK) {
+                // 2. Load the current list of users
+                List<User> users = FileDatabase.loadUsers();
+
+                // 3. Remove the user whose ID matches the current logged-in user
+                boolean removed = users.removeIf(u -> u.getId() == user.getId());
+
+                if (removed) {
+                    // 4. Save the updated list back to the file
+                    FileDatabase.saveUsers(users);
+
+                    // 5. Clear the session/logout and redirect to home
+                    app.openLoginScene();
+                    System.out.println("Account deleted successfully.");
+                }
+            }
+        });
+        backHome.setOnAction(e->{app.openHomeScene();});
+        backGraph.setOnAction(e->{app.openGraphScene();});
         return new Scene(rootContainer, 1200, 794);
     }
 }

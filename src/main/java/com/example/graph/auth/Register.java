@@ -14,13 +14,16 @@ import javafx.scene.text.FontWeight;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import static com.example.graph.auth.ValidatorUtils.*;
 public class Register {
     private GraphingApp app;
+    Label elabel=new Label();
+
     private Map<String, TextInputControl> inputMap = new HashMap<>();
     public Register(GraphingApp app) {
         this.app = app;
     }
+
 
     public Scene createRegisterScene() {
         // 1. Root Container: StackPane allows centering the form on any screen size
@@ -41,7 +44,7 @@ public class Register {
         Label heading = new Label("Create Account");
         heading.setFont(Font.font("System", FontWeight.BOLD, 32));
         heading.setTextFill(Color.web("#2c3e50"));
-
+        elabel.setStyle("-fx-text-fill: red;");
         // 3. Responsive GridPane
         GridPane grid = new GridPane();
         grid.setHgap(15);
@@ -63,7 +66,7 @@ public class Register {
 
             TextInputControl inputField;
             if (labelTexts[i].equals("Password:")) {
-                inputField = new PasswordField();
+//                inputField = new PasswordField();
                 StackPane passwordContainer = new StackPane();
 
                 PasswordField pf = new PasswordField();
@@ -71,11 +74,9 @@ public class Register {
                 tfVisible.setManaged(false);
                 tfVisible.setVisible(false);
 
-                Button toggleBtn = new Button("👁"); // এই আইকনটি শো/হাইড করবে
+                Button toggleBtn = new Button("👁");
                 toggleBtn.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
                 StackPane.setAlignment(toggleBtn, Pos.CENTER_RIGHT);
-
-                // Toggle logic
                 toggleBtn.setOnAction(event -> {
                     if (pf.isVisible()) {
                         tfVisible.setText(pf.getText());
@@ -84,6 +85,7 @@ public class Register {
                         pf.setVisible(false);
                         pf.setManaged(false);
                         toggleBtn.setText("🙈");
+
                     } else {
                         pf.setText(tfVisible.getText());
                         pf.setVisible(true);
@@ -93,36 +95,25 @@ public class Register {
                         toggleBtn.setText("👁");
                     }
                 });
-
-                // স্টাইলিং
                 pf.setStyle("-fx-background-radius: 5; -fx-padding: 8 30 8 8; -fx-border-color: #dcdde1; -fx-border-radius: 5;");
                 tfVisible.setStyle(pf.getStyle());
-
                 passwordContainer.getChildren().addAll(pf, tfVisible, toggleBtn);
-                inputMap.put(labelTexts[i], pf); // মূল Map এ PasswordField রাখলাম
-
+                inputMap.put(labelTexts[i], pf);
                 grid.add(label, 0, i);
                 grid.add(passwordContainer, 1, i);
                 continue;
             } else {
                 inputField = new TextField();
             }
-
-            // Modern styling for inputs
             inputField.setStyle("-fx-background-radius: 5; -fx-padding: 8; -fx-border-color: #dcdde1; -fx-border-radius: 5;");
             inputField.setMaxWidth(Double.MAX_VALUE); // Allows field to grow
             inputMap.put(labelTexts[i], inputField);
             grid.add(label, 0, i);
             grid.add(inputField, 1, i);
         }
-        // --- Your Original Logic Ends Here ---
-
-        // 4. Buttons Layout
         Button register = new Button("Register");
         register.setDefaultButton(true);
         Button cancel = new Button("Cancel");
-        Label label=new Label();
-        // Styling Buttons
         String btnBase = "-fx-cursor: hand; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20;";
         register.setStyle(btnBase + "-fx-background-color: #2ecc71; -fx-text-fill: white;");
         cancel.setStyle(btnBase + "-fx-background-color: #e74c3c; -fx-text-fill: white;");
@@ -135,39 +126,72 @@ public class Register {
         HBox.setHgrow(register, Priority.ALWAYS);
         HBox.setHgrow(cancel, Priority.ALWAYS);
 
-        // Assemble
-        formCard.getChildren().addAll(heading, grid, buttonBox);
-        rootContainer.getChildren().add(formCard);
 
-        // Logic for navigation
+        formCard.getChildren().addAll(heading, grid, buttonBox,elabel);
+        rootContainer.getChildren().add(formCard);
                 register.setOnAction(e -> {
-            // 3. This is how you get the text now!
+
             String userName = inputMap.get("User Name:").getText();
             List<User> users = FileDatabase.loadUsers();
+                   if(!userName.isEmpty())
+                   {
+                       for (User user : users) {
+                           if (user.getUsername().equals(userName)) {
+                               elabel.setText("Username already exists!");
+                               return;
+                           }
+                       }
+                   }else {
+                       elabel.setText("Required Fill all Field");
+                       return;
+                   }
 
-                    for (User user : users) {
-                        if (user.getUsername().equals(userName)) {
-                            label.setText("Username already exists!");
 
-//                            System.out.println("Username already exists!");
-                            return;
-                        }
-                    }
-            String password = inputMap.get("Password:").getText();
+                   String password = inputMap.get("Password:").getText();
+                   if(!password.isEmpty())
+                   {
+                       if (!isValidPassword(password)) {
+                           elabel.setText("Password must be 8+ chars with letters, numbers & symbols!");
+                           return;
+                       }
+                   }else
+                   {
+                       elabel.setText("Required Fill all Field");
+                       return;
+                   }
                     String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
                     int newId = users.size() + 1;
 
             String email = inputMap.get("Email:").getText();
+            if (!email.isEmpty())
+            {
+               if(!isValidEmailFormat(email))
+               {
+                   elabel.setText("Invalid email format.");
+                   return;
+               }
+            }else
+            {
+                elabel.setText("Required Fill all Field");
+                return;
+            }
             String phone = inputMap.get("Phone:").getText();
+                    if (!phone.isEmpty())
+                    {
+                      if(!isValidPhoneNumber(phone))
+                      {
+                          elabel.setText("Invalid Phone Number.");
+                          return;
+                      }
+                    }else {
+                        elabel.setText("Required Fill all Field");
+                    }
             User newUser = new User(newId, userName, hashedPassword,email,phone);
             users.add(newUser);
             FileDatabase.saveUsers(users);
-            System.out.println("Registration successful!");
-            System.out.println("User: " + userName + " Registered!");
             app.openLoginScene();
         });
         cancel.setOnAction(e -> app.openHomeScene());
-
         return new Scene(rootContainer, 1200, 794);
     }
 }

@@ -39,13 +39,32 @@ public class PlotEquation {
             XYChart.Series<Number, Number> series = new XYChart.Series<>();
             series.setName("y = " + equation);
 
+//            for (int i = 0; i <= (UPPER_BOUND - LOWER_BOUND) * 25; i++) {
+//                double x = LOWER_BOUND + i * 0.04;
+//                double y = EQ.evaluate(x);
+//
+//                if (!Double.isNaN(y) && y != Double.POSITIVE_INFINITY && y != Double.NEGATIVE_INFINITY) {
+//                    series.getData().add(new XYChart.Data<>(x, y));
+//                } else {
+//                    if (!series.getData().isEmpty()) seriesArr.add(series);
+//                    series = new XYChart.Series<>();
+//                }
+//            }
             for (int i = 0; i <= (UPPER_BOUND - LOWER_BOUND) * 25; i++) {
                 double x = LOWER_BOUND + i * 0.04;
-                double y = EQ.evaluate(x);
+                try {
+                    double y = EQ.evaluate(x);
 
-                if (!Double.isNaN(y) && y != Double.POSITIVE_INFINITY && y != Double.NEGATIVE_INFINITY) {
-                    series.getData().add(new XYChart.Data<>(x, y));
-                } else {
+                    // Check for NaN, Infinities, and ensure Y isn't a massive "spike"
+                    if (Double.isFinite(y)) {
+                        series.getData().add(new XYChart.Data<>(x, y));
+                    } else {
+                        // If y is NaN (like 0/0), break the line segment
+                        if (!series.getData().isEmpty()) seriesArr.add(series);
+                        series = new XYChart.Series<>();
+                    }
+                } catch (Exception e) {
+                    // This catches the "Division by zero" error from exp4j
                     if (!series.getData().isEmpty()) seriesArr.add(series);
                     series = new XYChart.Series<>();
                 }
