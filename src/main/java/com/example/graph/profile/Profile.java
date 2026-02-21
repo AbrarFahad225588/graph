@@ -44,7 +44,7 @@ public class Profile {
         formCard.setAlignment(Pos.CENTER);
 
         // Heading
-        Label heading = new Label("Create Account");
+        Label heading = new Label("Profile");
         heading.setFont(Font.font("System", FontWeight.BOLD, 32));
         heading.setTextFill(Color.web("#2c3e50"));
 
@@ -70,6 +70,47 @@ public class Profile {
             TextInputControl inputField;
             if (labelTexts[i].equals("Password:")) {
                 inputField = new PasswordField();
+
+                StackPane passwordContainer = new StackPane();
+
+                PasswordField pf = new PasswordField();
+                TextField tfVisible = new TextField();
+                tfVisible.setManaged(false);
+                tfVisible.setVisible(false);
+
+                Button toggleBtn = new Button("👁"); // এই আইকনটি শো/হাইড করবে
+                toggleBtn.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+                StackPane.setAlignment(toggleBtn, Pos.CENTER_RIGHT);
+
+                // Toggle logic
+                toggleBtn.setOnAction(event -> {
+                    if (pf.isVisible()) {
+                        tfVisible.setText(pf.getText());
+                        tfVisible.setVisible(true);
+                        tfVisible.setManaged(true);
+                        pf.setVisible(false);
+                        pf.setManaged(false);
+                        toggleBtn.setText("🙈");
+                    } else {
+                        pf.setText(tfVisible.getText());
+                        pf.setVisible(true);
+                        pf.setManaged(true);
+                        tfVisible.setVisible(false);
+                        tfVisible.setManaged(false);
+                        toggleBtn.setText("👁");
+                    }
+                });
+
+                // স্টাইলিং
+                pf.setStyle("-fx-background-radius: 5; -fx-padding: 8 30 8 8; -fx-border-color: #dcdde1; -fx-border-radius: 5;");
+                tfVisible.setStyle(pf.getStyle());
+
+                passwordContainer.getChildren().addAll(pf, tfVisible, toggleBtn);
+                inputMap.put(labelTexts[i], pf); // মূল Map এ PasswordField রাখলাম
+
+                grid.add(label, 0, i);
+                grid.add(passwordContainer, 1, i);
+                continue;
             } else {
                 inputField = new TextField();
                 if (user != null) {
@@ -77,6 +118,7 @@ public class Profile {
                     else if (labelTexts[i].equals("Email:")) inputField.setText(user.getEmail());
                     else if (labelTexts[i].equals("Phone:")) inputField.setText(user.getPhone());
                 }
+
             }
 
             // Modern styling for inputs
@@ -90,7 +132,10 @@ public class Profile {
 
         // 4. Buttons Layout
         Button save = new Button("Save");
+        save.setDefaultButton(true);
         Button logout = new Button("Log Out");
+        Button backGraph=new Button("Graph");
+        Button backMenu=new Button("Menu");
 
         // Styling Buttons
         String btnBase = "-fx-cursor: hand; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20;";
@@ -105,8 +150,21 @@ public class Profile {
         HBox.setHgrow(save, Priority.ALWAYS);
         HBox.setHgrow(logout, Priority.ALWAYS);
 
+        backGraph.setStyle(btnBase + "-fx-background-color: #000099; -fx-text-fill: white;");
+        backMenu.setStyle(btnBase + "-fx-background-color: #000099; -fx-text-fill: white;");
+
+        backGraph.setMaxWidth(150);
+        backMenu.setMaxWidth(150);
+
+        HBox buttonBox2 = new HBox(10, backGraph, backMenu);
+        buttonBox2.setAlignment(Pos.CENTER);
+        HBox.setHgrow(backGraph, Priority.ALWAYS);
+        HBox.setHgrow(backMenu, Priority.ALWAYS);
+        VBox allBtn=new VBox(10,buttonBox,buttonBox2);
+
+
         // Assemble
-        formCard.getChildren().addAll(heading, grid, buttonBox);
+        formCard.getChildren().addAll(heading, grid, allBtn);
         rootContainer.getChildren().add(formCard);
 
         // Logic for navigation
@@ -147,11 +205,11 @@ public class Profile {
             if (updated) {
                 FileDatabase.saveUsers(users);
                 System.out.println("Profile Updated Successfully!");
-                app.openGraphScene(); // আপডেট শেষে গ্রাফ পেজে ফিরে যাওয়া
+                app.openProfileScene(); // আপডেট শেষে গ্রাফ পেজে ফিরে যাওয়া
             }
 
         });
-        logout.setOnAction(e -> app.openMenuScene());
+        logout.setOnAction(e -> app.openLoginScene());
 
         return new Scene(rootContainer, 1200, 794);
     }

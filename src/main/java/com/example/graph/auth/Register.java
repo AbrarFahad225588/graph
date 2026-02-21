@@ -64,6 +64,46 @@ public class Register {
             TextInputControl inputField;
             if (labelTexts[i].equals("Password:")) {
                 inputField = new PasswordField();
+                StackPane passwordContainer = new StackPane();
+
+                PasswordField pf = new PasswordField();
+                TextField tfVisible = new TextField();
+                tfVisible.setManaged(false);
+                tfVisible.setVisible(false);
+
+                Button toggleBtn = new Button("👁"); // এই আইকনটি শো/হাইড করবে
+                toggleBtn.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+                StackPane.setAlignment(toggleBtn, Pos.CENTER_RIGHT);
+
+                // Toggle logic
+                toggleBtn.setOnAction(event -> {
+                    if (pf.isVisible()) {
+                        tfVisible.setText(pf.getText());
+                        tfVisible.setVisible(true);
+                        tfVisible.setManaged(true);
+                        pf.setVisible(false);
+                        pf.setManaged(false);
+                        toggleBtn.setText("🙈");
+                    } else {
+                        pf.setText(tfVisible.getText());
+                        pf.setVisible(true);
+                        pf.setManaged(true);
+                        tfVisible.setVisible(false);
+                        tfVisible.setManaged(false);
+                        toggleBtn.setText("👁");
+                    }
+                });
+
+                // স্টাইলিং
+                pf.setStyle("-fx-background-radius: 5; -fx-padding: 8 30 8 8; -fx-border-color: #dcdde1; -fx-border-radius: 5;");
+                tfVisible.setStyle(pf.getStyle());
+
+                passwordContainer.getChildren().addAll(pf, tfVisible, toggleBtn);
+                inputMap.put(labelTexts[i], pf); // মূল Map এ PasswordField রাখলাম
+
+                grid.add(label, 0, i);
+                grid.add(passwordContainer, 1, i);
+                continue;
             } else {
                 inputField = new TextField();
             }
@@ -79,6 +119,7 @@ public class Register {
 
         // 4. Buttons Layout
         Button register = new Button("Register");
+        register.setDefaultButton(true);
         Button cancel = new Button("Cancel");
 
         // Styling Buttons
