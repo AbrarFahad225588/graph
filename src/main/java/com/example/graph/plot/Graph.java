@@ -1,6 +1,7 @@
 
 package com.example.graph.plot;
 
+import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -38,7 +39,7 @@ public class Graph {
     private final Map<TextField, ArrayList<XYChart.Series<Number, Number>>> equationMap = new HashMap<>();
     private final Map<TextField, Color> colorMap = new HashMap<>();
     private final Map<TextField, Label> errorMap = new HashMap<>();
-
+    private double time = 0;
     public Graph(GraphingApp app) { this.app = app; }
         private double lastMouseX, lastMouseY;
 
@@ -110,7 +111,10 @@ public class Graph {
         lineChart.setCreateSymbols(false);
         lineChart.setLegendVisible(true);
         lineChart.setAnimated(true);
-        lineChart.setTitle("CalioGraphy Graph");
+        lineChart.setTitle("CalliGraphy Graph");
+
+
+
         lineChart.setStyle("-fx-background-color: white; -fx-border-color: #dcdde1; -fx-border-width: 1;");
         VBox.setVgrow(lineChart, Priority.ALWAYS);
         VBox mainVBox = new VBox(10);
@@ -138,37 +142,86 @@ public class Graph {
         bottomPanel.getChildren().addAll(equationLabel, equationListContainer, buttonBox);
         HBox nav = new HBox();
         nav.setPadding(new Insets(0, 0, 10, 0));
+        nav.setAlignment(Pos.CENTER);
+        nav.setStyle("-fx-background-color: white; -fx-padding: 15;");
+
         Button rlabel = createOptionButton("Register", "#50C878", app::openRegisterScene);
         Button llabel = createOptionButton("Login", "#c0392b", app::openLoginScene);
         Button plabel = createOptionButton("Profile", "#50C878", app::openProfileScene);
         Button logoutlabel = createOptionButton("Log out", "#c0392b", app::openLogOutScene);
         Button savePng = createOptionButton("Save Graph", "#50C878", this::savePNG);
 
-// 1. Create the right-side container
-        HBox allNavBtn = new HBox(3); // 3 is the spacing
+        HBox rightButtons = new HBox(5);
         if (authenticated == null) {
-            allNavBtn.getChildren().addAll(rlabel, llabel);
+            rightButtons.getChildren().addAll(rlabel, llabel);
         } else {
-            allNavBtn.getChildren().addAll(plabel, logoutlabel);
+            rightButtons.getChildren().addAll(plabel, logoutlabel);
         }
 
-// 2. Create a Spacer to push the right buttons to the edge
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+        HBox animatedTitle = createAnimatedTitle();
 
-// 3. Add to nav: [Save Button] [SPACER] [Auth Buttons]
-        nav.getChildren().addAll(savePng, spacer, allNavBtn);
-        nav.setAlignment(Pos.CENTER);
+        Region leftSpacer = new Region();
+        Region rightSpacer = new Region();
+
+        HBox.setHgrow(leftSpacer, Priority.ALWAYS);
+        HBox.setHgrow(rightSpacer, Priority.ALWAYS);
+
+        nav.getChildren().addAll(
+                savePng,
+                leftSpacer,
+                animatedTitle,
+                rightSpacer,
+                rightButtons
+        );
         mainVBox.getChildren().addAll(nav,lineChart, bottomPanel);
 
-        // Responsive ScrollPane
         ScrollPane rootPane = new ScrollPane(mainVBox);
-        rootPane.setFitToWidth(true); // Crucial for responsiveness
+        rootPane.setFitToWidth(true);
         rootPane.setFitToHeight(true);
 
         return new Scene(rootPane, 1200, 794);
     }
+    private HBox createAnimatedTitle() {
 
+        HBox titleBox = new HBox(2);
+        titleBox.setAlignment(Pos.CENTER);
+
+        String text = "CalliGraphy Graph";
+
+        for (char c : text.toCharArray()) {
+            Label letter = new Label(String.valueOf(c));
+            letter.setFont(Font.font("System", 20));
+            titleBox.getChildren().add(letter);
+        }
+
+        AnimationTimer timer = new AnimationTimer() {
+
+            private double time = 0;
+
+            @Override
+            public void handle(long now) {
+
+                time += 0.08;
+
+                for (int i = 0; i < titleBox.getChildren().size(); i++) {
+
+                    Label letter = (Label) titleBox.getChildren().get(i);
+
+                    // 🌊 Sine wave motion
+                    double y = Math.sin(time + i * 0.5) * 15;
+                    letter.setTranslateY(y);
+
+                    // 🌈 Smooth rainbow color transition
+                    double hue = (time * 60 + i * 20) % 360;
+                    letter.setTextFill(Color.hsb(hue, 1.0, 1.0));
+                }
+            }
+        };
+
+        timer.start();
+
+        return titleBox;
+    }
     private HBox createEquationBox(VBox bottomPanel) {
         HBox equationBox = new HBox(15);
         equationBox.setAlignment(Pos.CENTER_LEFT);
@@ -185,7 +238,7 @@ public class Graph {
         tf.setPromptText("e.g. x^2 + 5x + 2");
         tf.setStyle("-fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #dcdde1; -fx-padding: 8;");
         tf.setFont(new Font(16));
-        HBox.setHgrow(tf, Priority.ALWAYS); // TextField fills space
+        HBox.setHgrow(tf, Priority.ALWAYS);
 
         tf.textProperty().addListener((obs, old, newValue) -> {
             if (newValue.isEmpty()) {
