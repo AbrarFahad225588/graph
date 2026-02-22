@@ -27,11 +27,10 @@ public class Login {
     }
 
     public Scene createLoginScene() {
-        // 1. Root Container (Same as Register)
+
         StackPane rootContainer = new StackPane();
         rootContainer.setStyle("-fx-background-color: #f4f4f4;");
 
-        // 2. The Form Card (Same as Register)
         VBox formCard = new VBox(30);
         formCard.setPadding(new Insets(40));
         formCard.setMaxWidth(500);
@@ -41,12 +40,10 @@ public class Login {
                 "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);");
         formCard.setAlignment(Pos.CENTER);
 
-        // Heading
         Label heading = new Label("Welcome Back");
         heading.setFont(Font.font("System", FontWeight.BOLD, 32));
         heading.setTextFill(Color.web("#2c3e50"));
 
-        // 3. Responsive GridPane
         GridPane grid = new GridPane();
         grid.setHgap(15);
         grid.setVgap(20);
@@ -58,7 +55,6 @@ public class Login {
         col2.setPercentWidth(65);
         grid.getColumnConstraints().addAll(col1, col2);
 
-        // --- Fields Logic (Username and Password only) ---
         String[] labelTexts = {"User Name:", "Password:"};
         for (int i = 0; i < labelTexts.length; i++) {
             Label label = new Label(labelTexts[i]);
@@ -75,11 +71,10 @@ public class Login {
                 tfVisible.setManaged(false);
                 tfVisible.setVisible(false);
 
-                Button toggleBtn = new Button("👁"); // এই আইকনটি শো/হাইড করবে
+                Button toggleBtn = new Button("👁");
                 toggleBtn.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
                 StackPane.setAlignment(toggleBtn, Pos.CENTER_RIGHT);
 
-                // Toggle logic
                 toggleBtn.setOnAction(event -> {
                     if (pf.isVisible()) {
                         tfVisible.setText(pf.getText());
@@ -98,12 +93,12 @@ public class Login {
                     }
                 });
 
-                // স্টাইলিং
+
                 pf.setStyle("-fx-background-radius: 5; -fx-padding: 8 30 8 8; -fx-border-color: #dcdde1; -fx-border-radius: 5;");
                 tfVisible.setStyle(pf.getStyle());
 
                 passwordContainer.getChildren().addAll(pf, tfVisible, toggleBtn);
-                inputMap.put(labelTexts[i], pf); // মূল Map এ PasswordField রাখলাম
+                inputMap.put(labelTexts[i], pf);
 
                 grid.add(label, 0, i);
                 grid.add(passwordContainer, 1, i);
@@ -140,28 +135,21 @@ public class Login {
         HBox.setHgrow(loginBtn, Priority.ALWAYS);
         HBox.setHgrow(backBtn, Priority.ALWAYS);
 
-        // Assemble
         formCard.getChildren().addAll(heading, grid, buttonBox,label);
         rootContainer.getChildren().add(formCard);
 
-        // --- Login Logic ---
         loginBtn.setOnAction(e -> {
             String userName = inputMap.get("User Name:").getText();
             String password = inputMap.get("Password:").getText();
-
             List<User> users = FileDatabase.loadUsers();
-
-
             for (User user : users) {
                 if (user.getUsername().equals(userName)) {
-                    // Use BCrypt to check the entered password against the hashed one
                     if (BCrypt.checkpw(password, user.getPassword())) {
                         authenticated =user;
                         break;
                     }
                 }
             }
-
             if (authenticated!=null) {
 
                 app.openGraphScene();

@@ -20,7 +20,7 @@ public class GraphingApp extends Application {
         this.stage = primaryStage;
         stage.setTitle("calligraphy");
         try {
-            // Using the same path structure as your home screen images
+
             Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/graph/sinewave.png")));
             stage.getIcons().add(icon);
         } catch (Exception e) {

@@ -32,12 +32,8 @@ public class Home {
 
 
         StackPane heroSection = createHeroSection();
-
-        // 3. Tools Section (Bottom)
         VBox toolsSection = createToolsSection();
-
         root.getChildren().addAll(navbar, heroSection, toolsSection);
-
         Scene scene = new Scene(root, 1000, 700);
         return  scene;
     }
@@ -47,13 +43,10 @@ public class Home {
         nav.setPadding(new Insets(10, 40, 10, 40));
         nav.setAlignment(Pos.CENTER_LEFT);
         nav.setStyle("-fx-background-color: white;");
-
         Label logo = new Label("Calligraphy");
         logo.setStyle("-fx-font-size: 24px; -fx-text-fill: #808080; -fx-font-weight: bold;");
-
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-
         Button login = new Button("Log In");
         login.setStyle("-fx-background-color: #F44336;-fx-text-fill: white; -fx-font-weight: bold;");
         login.setOnAction(e->{
@@ -61,7 +54,7 @@ public class Home {
         });
         login.setOnMouseEntered(e -> {
             login.setStyle("-fx-background-color: #F44999;-fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
-            login.setTranslateY(-2); // Subtle "lift" effect
+            login.setTranslateY(-2); 
         });
 
         login.setOnMouseExited(e -> {
@@ -75,7 +68,7 @@ public class Home {
           });
         register.setOnMouseEntered(e -> {
             register.setStyle("-fx-background-color: #1b9d4b;-fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
-            register.setTranslateY(-2); // Subtle "lift" effect
+            register.setTranslateY(-2); 
         });
 
         register.setOnMouseExited(e -> {
@@ -114,7 +107,7 @@ public class Home {
          });
         openCalc.setOnMouseEntered(e -> {
             openCalc.setStyle("-fx-background-color: white; -fx-text-fill: #333; -fx-font-size: 16px; -fx-padding: 10 20; -fx-cursor: hand;");
-            openCalc.setTranslateY(-2); // Subtle "lift" effect
+            openCalc.setTranslateY(-2); 
         });
 
         openCalc.setOnMouseExited(e -> {
@@ -129,34 +122,27 @@ public class Home {
         graphCard.setMinSize(300, 300);
         graphCard.setMaxSize(300, 300);
 
-        // 1. Path to your image
         String imagePath = Objects.requireNonNull(getClass().getResource("/com/example/graph/graphing-calculator.png")).toExternalForm();
 
-        // 2. Setting everything via CSS to avoid conflicts
         graphCard.setStyle(
                 "-fx-background-image: url('" + imagePath + "'); " +
                         "-fx-background-size: cover; " +
                         "-fx-background-position: center; " +
                         "-fx-background-repeat: no-repeat; " +
-                        "-fx-background-radius: 20; " + // Match the clip radius
+                        "-fx-background-radius: 20; " + 
                         "-fx-border-radius: 20; " +
                         "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 15, 0, 0, 5);"
         );
 
-        // 3. Optional: Clip the VBox so the image doesn't "leak" out of rounded corners
         Rectangle clip = new Rectangle(300, 300);
-        clip.setArcWidth(40); // Controls the roundness
+        clip.setArcWidth(40);
         clip.setArcHeight(40);
         graphCard.setClip(clip);
-
         content.getChildren().addAll(leftText, graphCard);
-
-
         SVGPath wave = new SVGPath();
         wave.setContent("M0,100 C150,200 350,0 500,100 C650,200 850,0 1000,100 L1000,200 L0,200 Z");
         wave.setFill(Color.WHITE);
         StackPane.setAlignment(wave, Pos.BOTTOM_CENTER);
-
         hero.getChildren().addAll(content, wave);
         return hero;
     }
@@ -165,53 +151,39 @@ public class Home {
         VBox tools = new VBox(30);
         tools.setAlignment(Pos.CENTER);
         tools.setPadding(new Insets(40));
-
         Label sectionTitle = new Label("Explore all of our math tools!");
         sectionTitle.setStyle("-fx-font-size: 24px; -fx-text-fill: #333;");
-
         GridPane grid = new GridPane();
         grid.setHgap(20);
         grid.setAlignment(Pos.CENTER);
-
-        // Tool Item Helper
         VBox graphing=createToolIcon("Graphing", "#22c55e");
         grid.add(graphing, 0, 0);
         graphing.setOnMouseClicked(e->{
             app.openGraphScene();
         });
-
         tools.getChildren().addAll(sectionTitle, grid);
         return tools;
     }
-
     private VBox createToolIcon(String name, String hexColor) {
         VBox box = new VBox(10);
         box.setAlignment(Pos.CENTER);
-
-        // 1. The Container for the icon
         StackPane iconRect = new StackPane();
         iconRect.setPrefSize(80, 80);
-        // Use a variable for the base style to make updating easier
         String baseStyle = "-fx-background-color: " + hexColor + "; -fx-background-radius: 15;";
         iconRect.setStyle(baseStyle);
-
-        // 2. The Sine/Cosine Wave (SVGPath)
         SVGPath wave = new SVGPath();
-        // This path creates a simple double-curve (sine-like) wave
         wave.setContent("M10,40 Q25,10 40,40 T70,40");
         wave.setStroke(Color.WHITE);
         wave.setStrokeWidth(3);
-        wave.setFill(null); // Keep it as a line, not a solid shape
+        wave.setFill(null);
 
         iconRect.getChildren().add(wave);
 
         Label label = new Label(name);
         label.setStyle("-fx-font-size: 14px; -fx-text-fill: #666;");
-
-        // 3. Logic for Hover (Handling everything on the 'box')
         box.setOnMouseEntered(e -> {
             iconRect.setStyle("-fx-background-color: #1b9d4b; -fx-background-radius: 15; -fx-cursor: hand;");
-            box.setTranslateY(-2); // Subtle "lift" effect
+            box.setTranslateY(-2); 
         });
 
         box.setOnMouseExited(e -> {

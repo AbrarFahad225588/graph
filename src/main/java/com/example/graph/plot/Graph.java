@@ -1,7 +1,6 @@
 
 package com.example.graph.plot;
 
-import com.example.graph.auth.AuthService;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -108,20 +107,16 @@ public class Graph {
     protected Scene createGraphScene() {
         applyAllMouseActions(lineChart);
 
-        // Styling the Chart
         lineChart.setCreateSymbols(false);
         lineChart.setLegendVisible(true);
         lineChart.setAnimated(true);
         lineChart.setTitle("CalioGraphy Graph");
         lineChart.setStyle("-fx-background-color: white; -fx-border-color: #dcdde1; -fx-border-width: 1;");
-        VBox.setVgrow(lineChart, Priority.ALWAYS); // Chart takes available height
-
-        // Main Layout
+        VBox.setVgrow(lineChart, Priority.ALWAYS);
         VBox mainVBox = new VBox(10);
         mainVBox.setPadding(new Insets(15));
         mainVBox.setStyle("-fx-background-color: #f5f6fa;");
 
-        // Bottom Controls Panel
         VBox bottomPanel = new VBox(10);
         bottomPanel.setPadding(new Insets(20));
         bottomPanel.setStyle("-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);");
@@ -131,8 +126,6 @@ public class Graph {
 
         VBox equationListContainer = new VBox(5);
         equationListContainer.getChildren().add(createEquationBox(bottomPanel));
-
-        // Buttons
         Button addEquationBtn = createOptionButton("Add", "#2ecc71", () -> {
             equationListContainer.getChildren().add(addEquationBox(bottomPanel));
         });
@@ -144,9 +137,7 @@ public class Graph {
 
         bottomPanel.getChildren().addAll(equationLabel, equationListContainer, buttonBox);
         HBox nav = new HBox();
-        nav.setPadding(new Insets(0, 0, 10, 0)); // Adds a little breathing room above the chart
-
-// Your buttons
+        nav.setPadding(new Insets(0, 0, 10, 0));
         Button rlabel = createOptionButton("Register", "#50C878", app::openRegisterScene);
         Button llabel = createOptionButton("Login", "#c0392b", app::openLoginScene);
         Button plabel = createOptionButton("Profile", "#50C878", app::openProfileScene);
@@ -264,7 +255,6 @@ public class Graph {
              fileChooser.getExtensionFilters()
                      .add(new FileChooser.ExtensionFilter("PNG", "*.png"));
 
-             // 1. Generate the date-time string (e.g., 2024-05-20_14-30-05)
              LocalDateTime now = LocalDateTime.now();
              DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
              String timestamp = now.format(formatter);
@@ -276,7 +266,6 @@ public class Graph {
 
              if (file != null) {
                  try {
-                     // Snapshot the chart and save
                      ImageIO.write(
                              SwingFXUtils.fromFXImage(
                                      lineChart.snapshot(new SnapshotParameters(), null),

@@ -32,17 +32,17 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 
 public class EquationSolverAll {
 
-    private final Expression e; // Store the compiled expression
+    private final Expression e;
 
     public EquationSolverAll(String expression) {
-        // Build the expression ONCE in the constructor
+
         this.e = new ExpressionBuilder(expression)
                 .variable("x")
+//                .variables()
                 .build();
     }
 
     public double evaluate(double xValue) {
-        // Just set the variable and evaluate
         return e.setVariable("x", xValue).evaluate();
     }
 

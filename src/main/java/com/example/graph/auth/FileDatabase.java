@@ -15,7 +15,6 @@ public class FileDatabase {
     public static List<User> loadUsers() {
         File file = new File(FILE_PATH);
 
-        // 1. If the file doesn't exist or is empty (0 bytes), return a new list
         if (!file.exists() || file.length() == 0) {
             return new ArrayList<>();
         }
@@ -24,7 +23,6 @@ public class FileDatabase {
             Type listType = new TypeToken<List<User>>(){}.getType();
             List<User> users = gson.fromJson(reader, listType);
 
-            // 2. Extra safety: if the file had text but Gson still returns null
             return users != null ? users : new ArrayList<>();
         } catch (IOException e) {
             System.err.println("Could not read database file: " + e.getMessage());

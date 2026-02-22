@@ -26,21 +26,19 @@ public class Register {
 
 
     public Scene createRegisterScene() {
-        // 1. Root Container: StackPane allows centering the form on any screen size
-        StackPane rootContainer = new StackPane();
-        rootContainer.setStyle("-fx-background-color: #f4f4f4;"); // Light gray background
 
-        // 2. The Form Card: A VBox to hold the header and the grid
+        StackPane rootContainer = new StackPane();
+        rootContainer.setStyle("-fx-background-color: #f4f4f4;");
+
         VBox formCard = new VBox(30);
         formCard.setPadding(new Insets(40));
-        formCard.setMaxWidth(500); // Prevents the form from getting too wide
+        formCard.setMaxWidth(500);
         formCard.setMaxHeight(600);
         formCard.setStyle("-fx-background-color: white; " +
                 "-fx-background-radius: 15; " +
                 "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);");
         formCard.setAlignment(Pos.CENTER);
 
-        // Heading
         Label heading = new Label("Create Account");
         heading.setFont(Font.font("System", FontWeight.BOLD, 32));
         heading.setTextFill(Color.web("#2c3e50"));
