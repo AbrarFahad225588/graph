@@ -14,7 +14,7 @@ public class ValidatorUtils{
         }
     public static boolean isValidPassword(String password) {
 
-        return password != null && password.length()>=8;
+        return password != null && password.length()>=4;
     }
     public static boolean isValidPhoneNumber(String phoneNumber) {
         String regex = "\\d{10}";

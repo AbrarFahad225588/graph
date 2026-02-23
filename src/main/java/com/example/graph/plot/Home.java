@@ -25,17 +25,14 @@ public class Home {
     public Scene createHomeScene(){
         VBox root = new VBox();
         root.setStyle("-fx-background-color: white;");
-
-
-
         HBox navbar = createNavbar();
-
-
         StackPane heroSection = createHeroSection();
         VBox toolsSection = createToolsSection();
-        root.getChildren().addAll(navbar, heroSection, toolsSection);
-        Scene scene = new Scene(root, 1000, 700);
-        return  scene;
+        HBox footer = createFooter();
+        root.getChildren().addAll(navbar, heroSection, toolsSection, footer);
+        VBox.setVgrow(toolsSection, Priority.ALWAYS);
+        Scene scene = new Scene(root, 1000, 750); // Increased height slightly to accommodate footer
+        return scene;
     }
 
     private HBox createNavbar() {
@@ -81,19 +78,13 @@ public class Home {
 
     private StackPane createHeroSection() {
         StackPane hero = new StackPane();
-
-        // Gradient Background
         Stop[] stops = new Stop[] { new Stop(0, Color.web("#1e4a8e")), new Stop(1, Color.web("#3b82f6"))};
         LinearGradient gradient = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, stops);
         hero.setBackground(new Background(new BackgroundFill(gradient, CornerRadii.EMPTY, Insets.EMPTY)));
         hero.setPrefHeight(400);
-
-        // Content Container
         HBox content = new HBox(40);
         content.setAlignment(Pos.CENTER);
         content.setPadding(new Insets(20));
-
-        // Left Text
         VBox leftText = new VBox(10);
         leftText.setAlignment(Pos.CENTER_LEFT);
         Label title = new Label("Beautiful free math.");
@@ -115,15 +106,11 @@ public class Home {
             openCalc.setTranslateY(0);
         });
         leftText.getChildren().addAll(title, subTitle, openCalc);
-
-
         VBox graphCard = new VBox();
         graphCard.setPrefSize(300, 300);
         graphCard.setMinSize(300, 300);
         graphCard.setMaxSize(300, 300);
-
         String imagePath = Objects.requireNonNull(getClass().getResource("/com/example/graph/graphing-calculator.png")).toExternalForm();
-
         graphCard.setStyle(
                 "-fx-background-image: url('" + imagePath + "'); " +
                         "-fx-background-size: cover; " +
@@ -139,10 +126,23 @@ public class Home {
         clip.setArcHeight(40);
         graphCard.setClip(clip);
         content.getChildren().addAll(leftText, graphCard);
+//        SVGPath wave = new SVGPath();
+//        wave.setContent("M0,100 C150,200 350,0 500,100 C650,200 850,0 1000,100 L1000,200 L0,200 Z");
+//        wave.setFill(Color.WHITE);
+//        StackPane.setAlignment(wave, Pos.BOTTOM_CENTER);
         SVGPath wave = new SVGPath();
         wave.setContent("M0,100 C150,200 350,0 500,100 C650,200 850,0 1000,100 L1000,200 L0,200 Z");
         wave.setFill(Color.WHITE);
-        StackPane.setAlignment(wave, Pos.BOTTOM_CENTER);
+
+// 1. Prevent the path from maintaining its original coordinate size
+        wave.setManaged(false);
+
+// 2. Bind the scale to the parent's width (assuming parent is a StackPane called 'root')
+        wave.scaleXProperty().bind(hero.widthProperty().divide(1000.0));
+
+// 3. Keep it centered and at the bottom
+        wave.layoutXProperty().bind(hero.widthProperty().divide(2).subtract(500));
+        wave.layoutYProperty().bind(hero.heightProperty().subtract(150));
         hero.getChildren().addAll(content, wave);
         return hero;
     }
@@ -193,6 +193,36 @@ public class Home {
 
         box.getChildren().addAll(iconRect, label);
         return box;
+    }
+    private HBox createFooter() {
+        HBox footer = new HBox(20);
+        footer.setPadding(new Insets(20, 40, 20, 40));
+        footer.setAlignment(Pos.CENTER_LEFT);
+        footer.setStyle("-fx-background-color: #f8f9fa; -fx-border-color: #e9ecef; -fx-border-width: 1 0 0 0;");
+
+        Label footerText = new Label("© 2026 Calligraphy Studio. Dedicated to mathematical exploration.");
+        footerText.setStyle("-fx-font-size: 14px; -fx-text-fill: #6c757d;");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Button creditsBtn = new Button("Credits");
+        creditsBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: #2d70b3; -fx-border-color: #2d70b3; -fx-border-radius: 5;");
+
+        creditsBtn.setOnMouseEntered(e -> {
+            creditsBtn.setStyle("-fx-background-color: #2d70b3; -fx-text-fill: white; -fx-border-radius: 5; -fx-cursor: hand;");
+        });
+        creditsBtn.setOnMouseExited(e -> {
+            creditsBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: #2d70b3; -fx-border-color: #2d70b3; -fx-border-radius: 5;");
+        });
+
+        creditsBtn.setOnAction(e -> {
+
+            app.openCreditsScene();
+        });
+
+        footer.getChildren().addAll(footerText, spacer, creditsBtn);
+        return footer;
     }
 
 }

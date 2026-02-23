@@ -73,5 +73,11 @@ public class GraphingApp extends Application {
         stage.setScene(profileScene);
 
     }
+    public void openCreditsScene() {
+        Credits credits = new Credits(this);
+        Scene creditsScene = credits.createCreditsScene();
+        stage.setScene(creditsScene);
+
+    }
 
 }

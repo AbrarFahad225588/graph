@@ -43,7 +43,6 @@ public class Register {
         heading.setFont(Font.font("System", FontWeight.BOLD, 32));
         heading.setTextFill(Color.web("#2c3e50"));
         elabel.setStyle("-fx-text-fill: red;");
-        // 3. Responsive GridPane
         GridPane grid = new GridPane();
         grid.setHgap(15);
         grid.setVgap(20);
@@ -149,7 +148,7 @@ public class Register {
                    if(!password.isEmpty())
                    {
                        if (!isValidPassword(password)) {
-                           elabel.setText("Password must be 8+ chars with letters, numbers & symbols!");
+                           elabel.setText("Password must be 4+ chars !");
                            return;
                        }
                    }else
