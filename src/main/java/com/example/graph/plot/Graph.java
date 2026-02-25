@@ -1,6 +1,5 @@
 
 package com.example.graph.plot;
-
 import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
@@ -39,7 +38,6 @@ public class Graph {
     private final Map<TextField, ArrayList<XYChart.Series<Number, Number>>> equationMap = new HashMap<>();
     private final Map<TextField, Color> colorMap = new HashMap<>();
     private final Map<TextField, Label> errorMap = new HashMap<>();
-    private double time = 0;
     public Graph(GraphingApp app) { this.app = app; }
         private double lastMouseX, lastMouseY;
 
@@ -81,6 +79,13 @@ public class Graph {
 
             lastMouseX = e.getX();
             lastMouseY = e.getY();
+            LOWER_BOUND = (int) xAxis.getLowerBound();
+            UPPER_BOUND = (int) xAxis.getUpperBound();
+            equationMap.keySet().forEach(tf -> {
+                if (!tf.getText().trim().isEmpty()) {
+                    plotEquation((HBox) tf.getParent(), tf.getText(), equationMap, lineChart, colorMap, errorMap);
+                }
+            });
         });
     }
 
@@ -112,11 +117,9 @@ public class Graph {
         lineChart.setLegendVisible(true);
         lineChart.setAnimated(true);
         lineChart.setTitle("CalliGraphy Graph");
-
-
-
         lineChart.setStyle("-fx-background-color: white; -fx-border-color: #dcdde1; -fx-border-width: 1;");
-        VBox.setVgrow(lineChart, Priority.ALWAYS);
+        lineChart.setMinHeight(500);
+        VBox.setVgrow(lineChart, Priority.ALWAYS);// akhne change anlam
         VBox mainVBox = new VBox(10);
         mainVBox.setPadding(new Insets(15));
         mainVBox.setStyle("-fx-background-color: #f5f6fa;");
@@ -173,12 +176,13 @@ public class Graph {
                 rightSpacer,
                 rightButtons
         );
-        mainVBox.getChildren().addAll(nav,lineChart, bottomPanel);
 
+        mainVBox.getChildren().addAll(nav,lineChart, bottomPanel);
         ScrollPane rootPane = new ScrollPane(mainVBox);
         rootPane.setFitToWidth(true);
-        rootPane.setFitToHeight(true);
-
+        rootPane.setFitToHeight(false);
+        rootPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        rootPane.setPannable(true);
         return new Scene(rootPane, 1200, 794);
     }
     private HBox createAnimatedTitle() {
@@ -207,19 +211,14 @@ public class Graph {
 
                     Label letter = (Label) titleBox.getChildren().get(i);
 
-                    // 🌊 Sine wave motion
                     double y = Math.sin(time + i * 0.5) * 15;
                     letter.setTranslateY(y);
-
-                    // 🌈 Smooth rainbow color transition
                     double hue = (time * 60 + i * 20) % 360;
                     letter.setTextFill(Color.hsb(hue, 1.0, 1.0));
                 }
             }
         };
-
         timer.start();
-
         return titleBox;
     }
     private HBox createEquationBox(VBox bottomPanel) {
@@ -298,9 +297,6 @@ public class Graph {
         return button;
     }
 
-
-// ... inside your class
-
     public void savePNG() {
          if(authenticated!=null)
          {
@@ -311,8 +307,6 @@ public class Graph {
              LocalDateTime now = LocalDateTime.now();
              DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
              String timestamp = now.format(formatter);
-
-             // 2. Set the default file name: "y_" + timestamp + ".png"
              fileChooser.setInitialFileName("y_" + timestamp + ".png");
 
              File file = fileChooser.showSaveDialog(null);

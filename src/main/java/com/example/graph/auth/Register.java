@@ -10,7 +10,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,18 +17,13 @@ import static com.example.graph.auth.ValidatorUtils.*;
 public class Register {
     private GraphingApp app;
     Label elabel=new Label();
-
     private Map<String, TextInputControl> inputMap = new HashMap<>();
     public Register(GraphingApp app) {
         this.app = app;
     }
-
-
     public Scene createRegisterScene() {
-
         StackPane rootContainer = new StackPane();
         rootContainer.setStyle("-fx-background-color: #f4f4f4;");
-
         VBox formCard = new VBox(30);
         formCard.setPadding(new Insets(40));
         formCard.setMaxWidth(500);
@@ -38,7 +32,6 @@ public class Register {
                 "-fx-background-radius: 15; " +
                 "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);");
         formCard.setAlignment(Pos.CENTER);
-
         Label heading = new Label("Create Account");
         heading.setFont(Font.font("System", FontWeight.BOLD, 32));
         heading.setTextFill(Color.web("#2c3e50"));
@@ -47,30 +40,23 @@ public class Register {
         grid.setHgap(15);
         grid.setVgap(20);
         grid.setAlignment(Pos.CENTER);
-
-        // Make columns responsive: Label takes 30%, TextField takes 70%
         ColumnConstraints col1 = new ColumnConstraints();
         col1.setPercentWidth(35);
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(65);
         grid.getColumnConstraints().addAll(col1, col2);
-
-        // --- Your Original Logic Starts Here ---
         String[] labelTexts = {"User Name:", "Password:", "Email:", "Phone:"};
         for (int i = 0; i < labelTexts.length; i++) {
             Label label = new Label(labelTexts[i]);
             label.setFont(Font.font("System", FontWeight.SEMI_BOLD, 14));
-
             TextInputControl inputField;
             if (labelTexts[i].equals("Password:")) {
 //                inputField = new PasswordField();
                 StackPane passwordContainer = new StackPane();
-
                 PasswordField pf = new PasswordField();
                 TextField tfVisible = new TextField();
                 tfVisible.setManaged(false);
                 tfVisible.setVisible(false);
-
                 Button toggleBtn = new Button("👁");
                 toggleBtn.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
                 StackPane.setAlignment(toggleBtn, Pos.CENTER_RIGHT);
@@ -114,20 +100,15 @@ public class Register {
         String btnBase = "-fx-cursor: hand; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20;";
         register.setStyle(btnBase + "-fx-background-color: #2ecc71; -fx-text-fill: white;");
         cancel.setStyle(btnBase + "-fx-background-color: #e74c3c; -fx-text-fill: white;");
-
         register.setMaxWidth(Double.MAX_VALUE);
         cancel.setMaxWidth(Double.MAX_VALUE);
-
         HBox buttonBox = new HBox(15, cancel, register);
         buttonBox.setAlignment(Pos.CENTER);
         HBox.setHgrow(register, Priority.ALWAYS);
         HBox.setHgrow(cancel, Priority.ALWAYS);
-
-
         formCard.getChildren().addAll(heading, grid, buttonBox,elabel);
         rootContainer.getChildren().add(formCard);
-                register.setOnAction(e -> {
-
+        register.setOnAction(e -> {
             String userName = inputMap.get("User Name:").getText();
             List<User> users = FileDatabase.loadUsers();
                    if(!userName.isEmpty())

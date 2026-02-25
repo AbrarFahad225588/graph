@@ -42,7 +42,9 @@ public class Credits {
         supervisorName.setStyle("-fx-font-size: 32px; -fx-text-fill: white; -fx-font-family: 'serif';");
         Label supervisorTitle = new Label("Professor, Dept. of Computer Science and Engineering");
         supervisorTitle.setStyle("-fx-font-size: 18px; -fx-text-fill: white; -fx-font-style: italic;");
-        supervisorBox.getChildren().addAll(supervisorLabel, supervisorName, supervisorTitle);
+        Label universityName = new Label("Hajee Mohammad Danesh Science and Technology University");
+        universityName.setStyle("-fx-font-size: 18px; -fx-text-fill: white; -fx-font-style: italic;");
+        supervisorBox.getChildren().addAll(supervisorLabel, supervisorName, supervisorTitle,universityName);
         HBox teamBox = new HBox(60);
         teamBox.setAlignment(Pos.CENTER);
         teamBox.setPadding(new Insets(40, 0, 40, 0));
@@ -50,7 +52,7 @@ public class Credits {
                 createMemberNode("Md. Motairul Hoque Fahad", "2302024"),
                 createMemberNode("Sobuj Chandra Roy", "2302016")
         );
-        Button backBtn = new Button("Back to Menu");
+        Button backBtn = new Button("Back to Home");
         backBtn.setStyle("-fx-background-color: #33e1ed; -fx-text-fill: #1e4a8e; -fx-font-weight: bold; " +
                 "-fx-padding: 10 30; -fx-background-radius: 5; -fx-font-size: 16px;");
         backBtn.setOnAction(e -> app.openHomeScene());

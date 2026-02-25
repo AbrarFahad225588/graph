@@ -47,37 +47,27 @@ public class Profile {
         Label heading = new Label("Profile");
         heading.setFont(Font.font("System", FontWeight.BOLD, 32));
         heading.setTextFill(Color.web("#2c3e50"));
-
-     
         GridPane grid = new GridPane();
         grid.setHgap(15);
         grid.setVgap(20);
         grid.setAlignment(Pos.CENTER);
-
-        
         ColumnConstraints col1 = new ColumnConstraints();
         col1.setPercentWidth(35);
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(65);
         grid.getColumnConstraints().addAll(col1, col2);
-
-   
         String[] labelTexts = {"User Name:", "Password:", "Email:", "Phone:"};
         for (int i = 0; i < labelTexts.length; i++) {
             Label label = new Label(labelTexts[i]);
             label.setFont(Font.font("System", FontWeight.SEMI_BOLD, 14));
-
             TextInputControl inputField;
             if (labelTexts[i].equals("Password:")) {
                 inputField = new PasswordField();
-
                 StackPane passwordContainer = new StackPane();
-
                 PasswordField pf = new PasswordField();
                 TextField tfVisible = new TextField();
                 tfVisible.setManaged(false);
                 tfVisible.setVisible(false);
-
                 Button toggleBtn = new Button("👁");
                 toggleBtn.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
                 StackPane.setAlignment(toggleBtn, Pos.CENTER_RIGHT);
@@ -99,11 +89,8 @@ public class Profile {
                         toggleBtn.setText("👁");
                     }
                 });
-
-               
                 pf.setStyle("-fx-background-radius: 5; -fx-padding: 8 30 8 8; -fx-border-color: #dcdde1; -fx-border-radius: 5;");
                 tfVisible.setStyle(pf.getStyle());
-
                 passwordContainer.getChildren().addAll(pf, tfVisible, toggleBtn);
                 inputMap.put(labelTexts[i], pf);
 
@@ -117,18 +104,13 @@ public class Profile {
                     else if (labelTexts[i].equals("Email:")) inputField.setText(user.getEmail());
                     else if (labelTexts[i].equals("Phone:")) inputField.setText(user.getPhone());
                 }
-
             }
-
             inputField.setStyle("-fx-background-radius: 5; -fx-padding: 8; -fx-border-color: #dcdde1; -fx-border-radius: 5;");
             inputField.setMaxWidth(Double.MAX_VALUE); 
             inputMap.put(labelTexts[i], inputField);
             grid.add(label, 0, i);
             grid.add(inputField, 1, i);
         }
-      
-
-  
         Button save = new Button("Save");
         save.setDefaultButton(true);
         Button delete = new Button("Delete");
@@ -136,7 +118,6 @@ public class Profile {
         Button backHome=new Button("Home");
        elabel=new Label();
         elabel.setStyle("-fx-text-fill: red;");
-        // Styling Buttons
         String btnBase = "-fx-cursor: hand; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20;";
         save.setStyle(btnBase + "-fx-background-color: #2ecc71; -fx-text-fill: white;");
         delete.setStyle(btnBase + "-fx-background-color: #e74c3c; -fx-text-fill: white;");
@@ -245,17 +226,6 @@ public class Profile {
                    elabel.setTextFill(Color.RED);
                });
                delay.play();
-                // elabel.setText("Profile Updated Successfully!");
-                // elabel.setTextFill(Color.GREEN);
-                // elabel.setOpacity(1.0); // Make sure it's visible
-
-            
-                // FadeTransition fade = new FadeTransition(Duration.seconds(1), elabel);
-                // fade.setFromValue(1.0);
-                // fade.setToValue(0.0);
-                // fade.setDelay(Duration.seconds(4));
-                // fade.play();
-                // elabel.setTextFill(Color.RED);
             }
 
         });

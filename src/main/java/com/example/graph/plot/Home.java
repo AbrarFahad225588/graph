@@ -126,21 +126,12 @@ public class Home {
         clip.setArcHeight(40);
         graphCard.setClip(clip);
         content.getChildren().addAll(leftText, graphCard);
-//        SVGPath wave = new SVGPath();
-//        wave.setContent("M0,100 C150,200 350,0 500,100 C650,200 850,0 1000,100 L1000,200 L0,200 Z");
-//        wave.setFill(Color.WHITE);
-//        StackPane.setAlignment(wave, Pos.BOTTOM_CENTER);
+
         SVGPath wave = new SVGPath();
         wave.setContent("M0,100 C150,200 350,0 500,100 C650,200 850,0 1000,100 L1000,200 L0,200 Z");
         wave.setFill(Color.WHITE);
-
-// 1. Prevent the path from maintaining its original coordinate size
         wave.setManaged(false);
-
-// 2. Bind the scale to the parent's width (assuming parent is a StackPane called 'root')
         wave.scaleXProperty().bind(hero.widthProperty().divide(1000.0));
-
-// 3. Keep it centered and at the bottom
         wave.layoutXProperty().bind(hero.widthProperty().divide(2).subtract(500));
         wave.layoutYProperty().bind(hero.heightProperty().subtract(150));
         hero.getChildren().addAll(content, wave);
@@ -176,21 +167,17 @@ public class Home {
         wave.setStroke(Color.WHITE);
         wave.setStrokeWidth(3);
         wave.setFill(null);
-
         iconRect.getChildren().add(wave);
-
         Label label = new Label(name);
         label.setStyle("-fx-font-size: 14px; -fx-text-fill: #666;");
         box.setOnMouseEntered(e -> {
             iconRect.setStyle("-fx-background-color: #1b9d4b; -fx-background-radius: 15; -fx-cursor: hand;");
             box.setTranslateY(-2); 
         });
-
         box.setOnMouseExited(e -> {
             iconRect.setStyle(baseStyle);
             box.setTranslateY(0);
         });
-
         box.getChildren().addAll(iconRect, label);
         return box;
     }
